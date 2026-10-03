@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>am — activate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f4f5;
+  --bg-grad-1: #eef2ff;
+  --bg-grad-2: #f4f4f5;
+  --panel: #ffffff;
+  --panel-soft: #fafafa;
+  --line: #e4e4e7;
+  --line-soft: #f1f1f3;
+  --txt: #18181b;
+  --txt-soft: #3f3f46;
+  --dim: #71717a;
+  --dim-soft: #a1a1aa;
+  --acc: #4f46e5;
+  --acc-hover: #4338ca;
+  --acc-soft: #eef2ff;
+  --acc-ring: rgba(79,70,229,.12);
+  --ok: #059669;
+  --ok-soft: #ecfdf5;
+  --ok-ring: #a7f3d0;
+  --red: #dc2626;
+  --red-soft: #fef2f2;
+  --red-ring: #fecaca;
+  --shadow-sm: 0 1px 2px rgba(24,24,27,.04);
+  --shadow: 0 4px 12px rgba(24,24,27,.06), 0 1px 3px rgba(24,24,27,.04);
+  --shadow-lg: 0 12px 32px rgba(24,24,27,.08), 0 2px 6px rgba(24,24,27,.04);
+}
+* { margin: 0; padding: 0; box-sizing: border-box }
+html, body { height: 100% }
+body {
+  background:
+    radial-gradient(1000px 600px at 50% -10%, var(--bg-grad-1), transparent 60%),
+    var(--bg-grad-2);
+  color: var(--txt);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  font-feature-settings: 'cv02','cv03','cv04','cv11';
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 56px 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.wrap { width: 100%; max-width: 480px }
+
+header { margin-bottom: 28px; text-align: center }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--dim);
+  margin-bottom: 10px;
+}
+.brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--acc);
+  box-shadow: 0 0 0 4px var(--acc-ring);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 4px var(--acc-ring) }
+  50% { box-shadow: 0 0 0 6px var(--acc-ring) }
+}
+header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--txt);
+  margin-bottom: 6px;
+}
+header h1 em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--dim);
+}
+header p { color: var(--dim); font-size: 13.5px }
+header p .author {
+  color: var(--acc);
+  font-weight: 600;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12.5px;
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.steps div {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 6px;
+  border-radius: 10px;
+  color: var(--dim-soft);
+  transition: all .25s ease;
+}
+.steps div.on {
+  background: var(--acc);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(79,70,229,.25);
+}
+.steps div.done {
+  background: var(--acc-soft);
+  color: var(--acc);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.panel h2 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+  color: var(--txt);
+}
+.panel .hint { color: var(--dim); font-size: 13px; margin-bottom: 18px; line-height: 1.5 }
+.panel .hint strong { color: var(--txt-soft); font-weight: 500 }
+
+label {
+  display: block;
+  color: var(--txt-soft);
+  font-size: 12.5px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+input {
+  width: 100%;
+  background: var(--panel-soft);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  color: var(--txt);
+  font: inherit;
+  font-size: 14px;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+input::placeholder { color: var(--dim-soft) }
+input:focus {
+  border-color: var(--acc);
+  background: #fff;
+  box-shadow: 0 0 0 4px var(--acc-ring);
+}
+button {
+  background: var(--acc);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 11px 20px;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: background .15s, transform .06s, box-shadow .15s;
+  box-shadow: 0 1px 2px rgba(79,70,229,.2), 0 4px 12px rgba(79,70,229,.15);
+}
+button:hover:not(:disabled) { background: var(--acc-hover); box-shadow: 0 2px 4px rgba(79,70,229,.25), 0 6px 16px rgba(79,70,229,.2) }
+button:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 2px rgba(79,70,229,.2) }
+button.sec {
+  background: var(--panel);
+  color: var(--txt-soft);
+  border: 1.5px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+button.sec:hover:not(:disabled) {
+  background: var(--panel-soft);
+  color: var(--txt);
+  border-color: var(--dim-soft);
+  box-shadow: var(--shadow);
+}
+button:disabled { opacity: .55; cursor: wait; box-shadow: none }
+
+.actions { display: flex; gap: 10px; align-items: center }
+.actions button { flex: 0 0 auto }
+.actions button:first-child { margin-right: auto }
+
+.msg {
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 14px;
+  display: none;
+  border-radius: 10px;
+  animation: slideIn .2s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-4px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+.msg.err { display: block; background: var(--red-soft); border: 1px solid var(--red-ring); color: var(--red) }
+.msg.ok  { display: block; background: var(--ok-soft); border: 1px solid var(--ok-ring); color: var(--ok) }
+
+.kv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 13.5px;
+  gap: 16px;
+}
+.kv:last-of-type { border-bottom: none }
+.kv b { color: var(--dim); font-weight: 500; font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em; flex-shrink: 0 }
+.kv span {
+  color: var(--txt);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  text-align: right;
+  word-break: break-all;
+  max-width: 65%;
+}
+
+.tok {
+  background: var(--panel-soft);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  word-break: break-all;
+  color: var(--dim);
+  max-height: 100px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+button.tiny {
+  margin: 10px 8px 0 0;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.stat-row { display: flex; justify-content: space-between; align-items: center; gap: 16px }
+.stat-label {
+  color: var(--dim);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.stat-val {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--txt);
+  font-variant-numeric: tabular-nums;
+}
+.stat-val.acc { color: var(--acc) }
+.stat-item { flex: 1 }
+.stat-item:last-child { text-align: right }
+
+footer {
+  margin-top: 32px;
+  color: var(--dim-soft);
+  font-size: 11.5px;
+  text-align: center;
+  letter-spacing: .02em;
+}
+
+.hide { display: none }
+
+.success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ok-soft);
+  color: var(--ok);
+  margin-right: 8px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span>Alight Motion</span>
+  </div>
+  <h1>Activate <em>Premium</em></h1>
+  <p>Magic link activation · by <span class="author">@SyamjaiDtz</span></p>
+</header>
+
+<div class="steps">
+  <div id="n1" class="on">Email</div>
+  <div id="n2">Link</div>
+  <div id="n3">Done</div>
+</div>
+
+<div class="panel stat-row">
+  <div class="stat-item">
+    <div class="stat-label">Total Activations</div>
+    <div class="stat-val acc" id="st-total">—</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-label">Today</div>
+    <div class="stat-val" id="st-today">—</div>
+  </div>
+</div>
+
+<div class="panel" id="p1">
+  <h2>Enter your email</h2>
+  <p class="hint">We'll send a secure login link to your inbox. No password needed.</p>
+  <label for="em">Email address</label>
+  <input id="em" type="email" placeholder="name@email.com" autocomplete="email">
+  <button id="b1">Send link &rarr;</button>
+  <div id="m1" class="msg"></div>
+</div>
+
+<div class="panel hide" id="p2">
+  <h2>Paste your link</h2>
+  <p class="hint">Link sent to <strong id="w-em">—</strong>. Copy the link from your email and paste it below.</p>
+  <label for="lk">Verification link</label>
+  <input id="lk" type="text" placeholder="https://... or oobCode">
+  <div class="actions">
+    <button class="sec" id="b2">&larr; Back</button>
+    <button id="b3">Verify &rarr;</button>
+  </div>
+  <div id="m2" class="msg"></div>
+</div>
+
+<div class="panel hide" id="p3">
+  <h2><span class="success-icon">✓</span>Premium activated</h2>
+  <p class="hint">Your account details are below. Copy your token to continue.</p>
+  <div class="kv"><b>Email</b><span id="r-em">—</span></div>
+  <div class="kv"><b>UID</b><span id="r-uid">—</span></div>
+  <div class="kv"><b>Order</b><span id="r-ord">—</span></div>
+  <div style="margin-top:16px">
+    <label>ID Token</label>
+    <div class="tok" id="r-tok">—</div>
+    <button class="tiny sec" id="b4">Copy token</button>
+    <button class="tiny sec" id="b5">New activation</button>
+  </div>
+</div>
+
+<footer>unofficial · reverse engineered · use at your own risk</footer>
+
+</div>
+
+<script>
+const $ = i => document.getElementById(i)
+
+fetch('/api/stats').then(r => r.json()).then(j => {
+  $('st-total').textContent = Number(j.total || 0).toLocaleString('en-US')
+  $('st-today').textContent = Number(j.today || 0).toLocaleString('en-US')
+}).catch(() => {})
+
+const step = n => {
+  for (let i = 1; i <= 3; i++) {
+    $('p' + i).classList.toggle('hide', i !== n)
+    $('n' + i).className = i < n ? 'done' : (i === n ? 'on' : '')
+  }
+}
+const say = (id, txt, ok) => {
+  const m = $(id)
+  m.textContent = txt
+  m.className = 'msg ' + (ok ? 'ok' : 'err')
+}
+const busy = (b, on, t) => { b.disabled = on; if (t) b.textContent = t }
+
+$('b1').onclick = async () => {
+  const em = $('em').value.trim()
+  if (!em.includes('@')) return say('m1', 'Please enter a valid email address', 0)
+  const b = $('b1'); busy(b, true, 'Sending...')
+  try {
+    const r = await fetch('/api/send-link', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify({ email: em }) })
+    const j = await r.json()
+    if (j.success) { say('m1', 'Link sent — check your email', 1); $('w-em').textContent = em; setTimeout(() => step(2), 700) }
+    else say('m1', j.message || 'Something went wrong', 0)
+  } catch { say('m1', 'Server unreachable', 0) }
+  busy(b, false); b.textContent = 'Send link \u2192'
+}
+
+$('b2').onclick = () => step(1)
+
+$('b3').onclick = async () => {
+  const raw = $('lk').value.trim()
+  if (!raw) return say('m2', 'Please paste your verification link', 0)
+  const b = $('b3'); busy(b, true, 'Verifying...')
+  try {
+    const r = await fetch('/api/verify-link', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify({ email: $('w-em').textContent, magicLink: raw }) })
+    const j = await r.json()
+    if (j.success) {
+      const d = j.data
+      $('r-em').textContent = d.email
+      $('r-uid').textContent = d.uid
+      $('r-ord').textContent = d.orderId || '—'
+      $('r-tok').textContent = d.idToken
+      window.__tok = d.idToken
+      step(3)
+    } else say('m2', j.message || 'Verification failed', 0)
+  } catch { say('m2', 'Server unreachable', 0) }
+  busy(b, false); b.textContent = 'Verify \u2192'
+}
+
+$('b4').onclick = () => {
+  navigator.clipboard.writeText(window.__tok || '')
+  const b = $('b4'); const orig = b.textContent
+  b.textContent = 'Copied!'
+  setTimeout(() => b.textContent = orig, 1500)
+}
+$('b5').onclick = () => { $('lk').value = ''; $('em').value = ''; step(1) }
+</script>
+</body>
+</html>
